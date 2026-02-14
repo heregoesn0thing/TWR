@@ -137,21 +137,34 @@ body{ margin:0; }
   <button onclick="pausarReloj()">⏸</button>
   <button onclick="ajustarHora()">✏</button>
 </div>
-
-<script>
-
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
 const socket = io()
-
-// Cuando creas aeronave
-socket.emit("crearAeronave", datos)
-
-// Cuando recibes aeronave creada por otro
 socket.on("crearAeronave", data => {
-   crearAeronaveRemota(data)
+
+  if(aeronaves.some(a => a.callsign === data.callsign)) return
+
+  const marker = L.marker([data.lat, data.lng], {
+    icon: crearIcono(data.callsign, data.tipo),
+    draggable:false
+  }).addTo(map)
+
+  aeronaves.push({
+    callsign: data.callsign,
+    tipo: data.tipo,
+    marker: marker,
+    puntosRuta: [],
+    rodando:false,
+    angulo:0,
+    altitud:0
+  })
+
 })
-</script>
+
+<script>
+
+// ================= MAP =================
 
 const map = L.map('map').setView([-13.7443,-76.2204],16)
 
@@ -937,10 +950,22 @@ function ajustarHora(){
 actualizarReloj()
 
 </script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io()
 
+// Cuando creas aeronave
+socket.emit("crearAeronave", datos)
+
+// Cuando recibes aeronave creada por otro
+socket.on("crearAeronave", data => {
+   crearAeronaveRemota(data)
+})
+</script>
 
 </body>
 </html>
+
 
 
 

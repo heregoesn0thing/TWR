@@ -138,34 +138,11 @@ body{ margin:0; }
   <button onclick="ajustarHora()">✏</button>
 </div>
 <script src="/socket.io/socket.io.js"></script>
-<script>
-
-const socket = io()
-socket.on("crearAeronave", data => {
-
-  if(aeronaves.some(a => a.callsign === data.callsign)) return
-
-  const marker = L.marker([data.lat, data.lng], {
-    icon: crearIcono(data.callsign, data.tipo),
-    draggable:false
-  }).addTo(map)
-
-  aeronaves.push({
-    callsign: data.callsign,
-    tipo: data.tipo,
-    marker: marker,
-    puntosRuta: [],
-    rodando:false,
-    angulo:0,
-    altitud:0
-  })
-
-})
 
 <script>
 
 // ================= MAP =================
-
+const socket = io()
 const map = L.map('map').setView([-13.7443,-76.2204],16)
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -965,6 +942,7 @@ socket.on("crearAeronave", data => {
 
 </body>
 </html>
+
 
 
 

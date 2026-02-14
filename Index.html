@@ -140,7 +140,18 @@ body{ margin:0; }
 
 <script>
 
-// ================= MAP =================
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io()
+
+// Cuando creas aeronave
+socket.emit("crearAeronave", datos)
+
+// Cuando recibes aeronave creada por otro
+socket.on("crearAeronave", data => {
+   crearAeronaveRemota(data)
+})
+</script>
 
 const map = L.map('map').setView([-13.7443,-76.2204],16)
 
@@ -926,21 +937,11 @@ function ajustarHora(){
 actualizarReloj()
 
 </script>
-<script src="/socket.io/socket.io.js"></script>
-<script>
-const socket = io()
 
-// Cuando creas aeronave
-socket.emit("crearAeronave", datos)
-
-// Cuando recibes aeronave creada por otro
-socket.on("crearAeronave", data => {
-   crearAeronaveRemota(data)
-})
-</script>
 
 </body>
 </html>
+
 
 
 
